@@ -1,2 +1,3 @@
-# BIMM 143 
-This is Cathy Diep's Github Pages for the UCSD Bioinformatics Lab
+# bimm143
+Bioinformatics class
+This repo is for my UCSD bioinformatics class.
