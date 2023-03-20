@@ -1,0 +1,141 @@
+---
+title: "Class 6: R Functions"
+author: Catherine (Cathy) Diep
+format: pdf
+toc: true 
+---
+
+# Function Basics
+
+All functions in R consist of at least 3 things: - A **name** which must start with a character - Input **arguments** as comma-separated inputs - The **body** where work actually happens
+
+# Q1 Write a function grade() to determine an overall grade from a vector of student homework assignment scores dropping the lowest single score.
+
+```{r}
+student1 <- c(100, 100, 100, 100, 100, 100, 100, 90) 
+student2 <- c(100, NA, 90, 90, 90, 90, 97, 80)
+student3 <- c(90, NA, NA, NA, NA, NA, NA, NA)
+```
+
+```{r}
+mean(student1)
+```
+
+```{r}
+min(student1)
+```
+
+```{r}
+which.min(student1)
+```
+
+```{r}
+student1[-8]
+```
+
+```{r}
+student1 [-which.min(student1)]
+mean(student1[-which.min(student1)])
+```
+
+-   Square brackets to select a point within a vector
+
+-   Minus sign in brackets to remove a specific point within a vector
+
+-   Mean of the vector without the lowest value
+
+-   This won't work for student 2 or student 3 because it will give NA
+
+-   Need to change mean's na.rm argument which will drop NA- default is na.rm = FALSE
+
+```{r}
+student2 [x = NA] <- 0
+mean(student2[-which.min(student2)], na.rm= TRUE)
+```
+
+-   na.rm doesn't work for student 3, which would make their average 90
+-   replace NA with 0
+
+```{r}
+student3
+is.na(student3)
+student3[is.na(student3)] <- 0
+mean(student3[-which.min(student3)])
+```
+
+-   Too much copy-and-paste, room for error
+
+```{r}
+x <- student1
+x[is.na(x)] <- 0
+mean(x[-which.min(x)])
+```
+
+-   Work has been simplified
+-   with this, just need to change 1st line
+
+-Now, turn this into a function
+
+```{r}
+grade <- function(x) {
+  x[is.na(x)] <- 0
+  mean(x[-which.min(x)])
+  }
+```
+
+
+# Q2. Who is the top scoring student in your gradebook?
+
+```{r}
+url <- "https://tinyurl.com/gradeinput"
+gradebook <- read.csv(url, row.names = 1)
+gradebook
+```
+```{r}
+?apply(array, margin, ...)
+results <- apply(gradebook, 1, grade)
+```
+
+```{r}
+which.max(results)
+results[which.max(results)]
+```
+
+- Student 18 is the highest scoring student. 
+
+
+# Q3. Which homework was toughest on students?
+
+```{r}
+average <- function(x) {
+  x[is.na(x)] <- 0
+  mean(x)}
+homework <- apply(gradebook, 2, average)
+homework[which.min(homework)]
+```
+
+
+```{r}
+which.min (apply (gradebook, 2, sum, na.rm = TRUE))
+```
+
+- Homework 2 was the most difficult for students. 
+
+
+# Q4 Which homework was most predictive of overall score?
+
+```{r}
+cor(gradebook [,5], results)
+```
+
+```{r}
+mask <- gradebook
+mask [is.na(mask)] <- 0 
+cor (mask$hw5, results)
+```
+
+```{r}
+apply (mask, 2, cor, y=results)
+```
+
+- Homework 5 was most predictive of overall score. 
