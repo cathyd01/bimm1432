@@ -1,0 +1,48 @@
+---
+title: "Find a Gene Project"
+author: "Catherine Diep"
+format: html
+---
+
+## Find a Gene Project
+
+## Q7 
+
+```{r}
+library(bio3d)
+```
+
+```{r}
+#Read alignment as FASTA into R 
+fasta <- read.fasta("fastamusclealignment.fst")
+```
+
+```{r}
+#Calculate a sequence identity matrix
+seqid <- seqidentity(fasta, normalize=TRUE, similarity=FALSE, ncore=1, nseg.scale=1)
+seqid
+```
+
+```{r}
+heatmap(seqid, margins=c(9,9))
+```
+## Q8
+
+```{r}
+#Creating a consensus sequence from the alignments
+consensus <- consensus(fasta)
+consensus
+```
+
+```{r}
+# Search PDB 
+
+consensusalso <- read.fasta("consensus.txt")
+```
+
+```{r}
+blast.pdb(consensusalso)
+```
+
+
+
